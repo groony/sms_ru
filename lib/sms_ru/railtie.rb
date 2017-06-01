@@ -10,12 +10,14 @@ module SmsRu
       case app.config.sms_ru.delivery_method
       when :webmock
         require 'webmock'
+        WebMock.enable! if WebMock.version.to_i == 3
         WebMock.stub_request(:any, /http:\/\/sms.ru/).
           to_return(status: 200, body: "100\n21115\nbalance=162.11")
       when :launchy
         require 'webmock'
         require 'launchy'
         require 'sms_ru/message'
+        WebMock.enable! if WebMock.version.to_i == 3
         WebMock.stub_request(:any, /http:\/\/sms.ru/)
           .to_return(status: 200, body: "100\n21115\nbalance=162.11")
         WebMock.after_request do |request, response|
